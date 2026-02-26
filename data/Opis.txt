@@ -1,0 +1,5 @@
+W pliku Poland PhysNew jest stan magazynu na dzień 15.12.2025 – wtedy odbyła się inwentaryzacja i pracownicy liczyli buty.
+Musimy mieć stan na dzień 31.12.2025, czyli musimy dodać towary, które przyjechały między 15.12 a 31.12 oraz odjąć te które zostały zakupione, odesłane itd. – te dane znajdują się w pliku Poland Transactions.
+W każdym pliku jest podział na sklepy – 642 (ursus), 739 (piaseczno), 1052 (kraków), 1053 (worcław), 1626 (Annopol).
+W finalnym pliku ze stanem na 31.12.2025 musimy mieć nawę towaru, ilość (zawsze 1 - jeden wiersz, jedna sztuka) oraz sklep. Pozostałe dane są zbędne.
+
