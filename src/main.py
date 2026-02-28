@@ -1,7 +1,7 @@
 import pandas as pd
 import sys
 from transform import time_complexity_to_df
-from extract import read_input, parse_row, parse_report, parse_report_transactions
+from extract import read_input, parse_row, parse_report, parse_report_transactions, fifo_remove_returns
 from config import FILE_PATH, FILE_PATH_TRANSACTIONS
 from openpyxl import load_workbook
 import cProfile
@@ -115,8 +115,9 @@ def main():
     "Qty": "count"
 })
     df_final2 = pd.concat([df_final_dane, df_final_renamed], ignore_index=True)
-    save_raport(df_final2, "final.xlsx")
-    print(df_final2)
+    df_clean = fifo_remove_returns(df_final2)
+    save_raport(df_clean, "final_clean.xlsx")
+    print(df_clean)
     
 if __name__ == "__main__":
 

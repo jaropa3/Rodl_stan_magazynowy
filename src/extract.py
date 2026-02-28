@@ -5,15 +5,20 @@ import re
 
 custom_sheet_names = {
     "642": "Ursus",
-    "642 Dec2": "Ursus - dodane",
+    #"642 Dec2": "Ursus - dodane",
+    "642 Dec2": "Ursus",
     "739": "Piaseczno",
-    "739 Dec3": "Piaseczno - dodane",
+    #"739 Dec3": "Piaseczno - dodane",
+    "739 Dec3": "Piaseczno",
     "1052": "Kraków",
-    "1052 Dec4": "Kraków - dodane",
+    #"1052 Dec4": "Kraków - dodane",
+    "1052 Dec4": "Kraków",
     "1053": "Wrocław",
-    "1053 Dec4": "Wrocław - dodane",
+    #"1053 Dec4": "Wrocław - dodane",
+    "1053 Dec4": "Wrocław",
     "1626": "Annopol",
-    "1626 Dec3": "Annopol - dodane"
+    #"1626 Dec3": "Annopol - dodane"
+    "1626 Dec3": "Annopol"
 }
 
 def read_input(file_path):
@@ -225,3 +230,32 @@ def parse_row(row: str):
         retail,
         ext_retail
     ]
+
+from collections import defaultdict, deque
+
+def fifo_remove_returns(df, item_col="item", qty_col="count", shop_col="Nazwa sklepu"):
+    df = df.copy()
+    df["_drop"] = False
+
+    queues = defaultdict(deque)  # (item, shop) -> kolejka indeksów
+
+    for idx, row in df.iterrows():
+        item = row[item_col]
+        qty = row[qty_col]
+        shop = row[shop_col]
+
+        key = (item, shop)
+
+        if qty > 0:
+            queues[key].append(idx)
+
+        elif qty == -1:
+            if queues[key]:
+                buy_idx = queues[key].popleft()
+                df.loc[buy_idx, "_drop"] = True
+                df.loc[idx, "_drop"] = True
+            else:
+                # orphan return w tym sklepie
+                df.loc[idx, "_drop"] = True
+
+    return df.loc[~df["_drop"]].drop(columns="_drop")
